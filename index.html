@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatUp</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+
+  <body>
+    <div class="chat-container">
+      <header>
+        <div style="display: flex; gap: 15px;"><a href="index.html"> <span id="back" class="back"><</span> </a> <div id="profileAvatar" class="profileAvatar"></div></div>
+        <div style="display: flex;align-items: center;justify-content: center;gap: 12px;">
+          <img src="./img/chat.png" alt="ChatApp Bot" style="width: 30px" />
+        </div>
+        <div class="options">
+          <button id="toggle-dark">
+            <img src="./img/moon.png" style="width: 25px" alt="" />
+          </button>
+          <button id="clear-chat">
+            <img src="./img/trash.png" style="width: 20px" alt="" />
+          </button>
+        </div>
+      </header>
+      <div id="chat-window" class="chat-window"></div>
+      <form id="chat-form" autocomplete="off" style="flex-direction: row">
+        <textarea
+          type="text"
+          id="user-input"
+          placeholder="Type your message..."
+          required
+        >
+        </textarea>
+        <button type="submit" class="send-btn">
+          <img src="./img/send.png" alt="ChatApp Bot" />
+        </button>
+      </form>
+    </div>
+    <script src="./js/script.js"></script>
+  </body>
+</html>
