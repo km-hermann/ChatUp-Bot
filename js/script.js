@@ -1,33 +1,30 @@
       // Dark Mode toggle
       const toggleDarkBtn = document.getElementById("toggle-dark");
 
-      // Function to apply the theme from localStorage
+      function setTheme(isDark) {
+        document.body.classList.toggle("dark-mode", isDark);
+        document.documentElement.setAttribute(
+          "data-theme",
+          isDark ? "dark" : "light"
+        );
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      }
+
       function applyTheme() {
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark") {
-          document.body.classList.add("dark-mode");
-          toggleDarkBtn.innerHTML =
-            '<img src="./img/sun.png" style="width: 25px" alt="" />';
-        } else {
-          document.body.classList.remove("dark-mode");
-          toggleDarkBtn.innerHTML =
-            '<img src="./img/moon.png" style="width: 25px" alt="" />';
-        }
+        setTheme(localStorage.getItem("theme") === "dark");
       }
       applyTheme();
       toggleDarkBtn.onclick = function () {
-        document.body.classList.toggle("dark-mode");
-
-        if (document.body.classList.contains("dark-mode")) {
-          localStorage.setItem("theme", "dark");
-          this.innerHTML =
-            '<img src="./img/sun.png" style="width: 25px" alt="" />';
-        } else {
-          localStorage.setItem("theme", "light");
-          this.innerHTML =
-            '<img src="./img/moon.png" style="width: 25px" alt="" />';
-        }
+        setTheme(!document.body.classList.contains("dark-mode"));
       };
+
+      function setAvatarInitial(userName) {
+        const avatar = document.getElementById("profileAvatar");
+        const initial = document.getElementById("avatarInitial");
+        if (!avatar || !initial || !userName) return;
+        initial.textContent = userName.charAt(0).toUpperCase();
+        avatar.classList.add("has-initial");
+      }
 
       // Chat logic with localStorage
       const chatWindow = document.getElementById("chat-window");
@@ -404,7 +401,7 @@
         const userName = prompt("Welcome to ChatUp!  Enter your name");
 
         if (userName) {
-        document.getElementById("profileAvatar").textContent = userName.charAt(0).toUpperCase();
+        setAvatarInitial(userName);
         const botBubbleElement = appendMessage("", "bot");
         const welcomeMessage = `Nice to meet you, ${userName}! 😊`;
           typeWriter(welcomeMessage, botBubbleElement);
@@ -419,13 +416,15 @@
 
       window.onload = () => {
         loadChatHistory();
+        const savedName = JSON.parse(localStorage.getItem("name"));
+        if (savedName) setAvatarInitial(savedName);
         const history = JSON.parse(
           localStorage.getItem("chatAppHistory") || "[]"
         );
         if (history.length === 0) {
           const userName = prompt("Welcome to ChatUp!  Enter your name");
           if (userName) {
-            document.getElementById("profileAvatar").textContent = userName.charAt(0).toUpperCase();
+            setAvatarInitial(userName);
             const welcomeMessage = `Nice to meet you, ${userName}! 😊`;
             const botBubbleElement = appendMessage("", "bot");
             typeWriter(welcomeMessage, botBubbleElement);
