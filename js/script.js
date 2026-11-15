@@ -243,7 +243,8 @@ function showNotice(text) {
 (function injectNoticeStyles() {
   const st = document.createElement("style");
   st.textContent =
-    ".ai-notice{font-size:.72rem;line-height:1.35;opacity:.7;margin:2px 14px 12px;max-width:85%;text-align:left;}";
+    ".ai-notice{font-size:.72rem;line-height:1.35;opacity:.7;margin:2px 14px 12px;max-width:85%;text-align:left;}" +
+    ".message.bot{white-space:pre-wrap;}";
   document.head.appendChild(st);
 })();
 
@@ -257,16 +258,17 @@ function cleanAIReply(text) {
     .replace(/__(.+?)__/g, "$1")
     .replace(/^#{1,6}\s+/gm, "")
     .replace(/`+/g, "")
-    .replace(/\s*\n\s*/g, " ")
+    .replace(/\s*\n\s*\n\s*/g, "\n\n") // keep paragraph breaks
+    .replace(/([^\n])\n(?!\n)/g, "$1 ") // single line breaks -> space
     .replace(/^"(.*)"$/, "$1")
     .trim();
 }
 
 // ---------- AI reply via Cloudflare Worker ----------
 // Paste your deployed Worker URL here (see the setup guide)
-const WORKER_URL = "https://chatup-bot.hermannmea777.workers.dev/";
+const WORKER_URL = "https://chatapp-proxy.YOUR-SUBDOMAIN.workers.dev";
 const MAX_CONTEXT_MESSAGES = 10; // how many recent messages are sent as context
-const AI_TIMEOUT_MS = 45000;
+const AI_TIMEOUT_MS = 45000; // long replies (stories) need more time
 
 function buildContextMessages() {
   const history = JSON.parse(
@@ -831,7 +833,7 @@ chatForm.addEventListener("submit", async function (e) {
   removeLoadingMessage();
   const botBubbleElement = appendMessage("", "bot");
   saveMessage(reply, "bot", notice);
-  typeWriter(reply, botBubbleElement, 12, () => {
+  typeWriter(reply, botBubbleElement, reply.length > 400 ? 4 : 12, () => {
     if (notice) showNotice(notice);
     isReplying = false;
   });
