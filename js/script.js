@@ -266,7 +266,7 @@ function cleanAIReply(text) {
 // Paste your deployed Worker URL here (see the setup guide)
 const WORKER_URL = "https://chatup-bot.hermannmea777.workers.dev/";
 const MAX_CONTEXT_MESSAGES = 10; // how many recent messages are sent as context
-const AI_TIMEOUT_MS = 20000;
+const AI_TIMEOUT_MS = 45000;
 
 function buildContextMessages() {
   const history = JSON.parse(
